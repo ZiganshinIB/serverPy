@@ -106,18 +106,7 @@ class MySqlDB:
                 select_query = f"SELECT ({', '.join(columns)})\n"
                 select_query += f"FROM {table_name}"
                 select_query += f"WHERE {filter_};"
-        except Exception as ex:
-            print("Error...")
-            print(ex)
-        finally:
-            self.connection.close()
-
-    def get_(self, table_name, columns, filter_):
-        try:
-            with self.connection.cursor() as cursor:
-                select_query = f"SELECT ({', '.join(columns)})\n"
-                select_query += f"FROM {table_name}"
-                select_query += f"WHERE {filter_};"
+                cursor.execute(select_query)
         except Exception as ex:
             print("Error...")
             print(ex)
