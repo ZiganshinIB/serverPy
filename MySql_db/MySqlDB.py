@@ -83,19 +83,43 @@ class MySqlDB:
         finally:
             self.connection.close()
 
+    # TODO: Дописать эту часть
+    def update(self, table_name, ref: dict, filter_):
+        try:
+            with self.connection.cursor() as cursor:
+                update_query = f"UPDATE `{table_name}` SET "
+                for d in ref:
+                    temp = ref[d]
+                    update_query += f"{d} ="
+                    update_query += f"{temp}, " if (type(temp) == int or type(temp) == float) else f"'{temp}', "
+                update_query = update_query[:-2] + "WHERE " + filter_ + ";"
+                print(update_query)
+        except Exception as ex:
+            print("Error...")
+            print(ex)
+        finally:
+            self.connection.close()
 
-def update(self, table_name, ref: dict, filter_):
-    try:
-        with self.connection.cursor() as cursor:
-            update_query = f"UPDATE `{table_name}` SET "
-            for d in ref:
-                temp = ref[d]
-                update_query += f"{d} ="
-                update_query += f"{temp}, " if (type(temp) == int or type(temp) == float) else f"'{temp}', "
-            update_query = update_query[:-2] + "WHERE " + filter_ + ";"
-            print(update_query)
-    except Exception as ex:
-        print("Error...")
-        print(ex)
-    finally:
-        self.connection.close()
+    def get(self, table_name, columns, filter_):
+        try:
+            with self.connection.cursor() as cursor:
+                select_query = f"SELECT ({', '.join(columns)})\n"
+                select_query += f"FROM {table_name}"
+                select_query += f"WHERE {filter_};"
+        except Exception as ex:
+            print("Error...")
+            print(ex)
+        finally:
+            self.connection.close()
+
+    def get_(self, table_name, columns, filter_):
+        try:
+            with self.connection.cursor() as cursor:
+                select_query = f"SELECT ({', '.join(columns)})\n"
+                select_query += f"FROM {table_name}"
+                select_query += f"WHERE {filter_};"
+        except Exception as ex:
+            print("Error...")
+            print(ex)
+        finally:
+            self.connection.close()
