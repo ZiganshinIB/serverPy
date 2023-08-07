@@ -9,7 +9,7 @@ client = socket.socket(
 )
 client.connect(HOST)
 print('Connected to', HOST)
-request = 'test'
+request=input("Введите текст: ")
 request = pickle.dumps(request)
 request += config.end
 
@@ -21,7 +21,6 @@ while True:
         break
     msg += data
 
-print(msg)
 print(pickle.loads(msg))
 
 

@@ -11,7 +11,6 @@ server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(HOST)
 server.listen()
 print('I am listening your connection ')
-d = [{'name': 'Amanda','age': 18}]
 
 
 def get_request():
@@ -25,6 +24,12 @@ def get_request():
     return pickle.loads(req)
 
 
+def sen_response(client, data_mes):
+    res = pickle.dumps(data_mes)
+    client.sendall(res)
+    client.close()
+
+
 while True:
     user, addr = server.accept()
     print('Connected -', addr)
@@ -32,11 +37,7 @@ while True:
     # -- Получение сообщения от клиента
     req = get_request()
     print(req)
+    sen_response(user, ('Вы отправили', req))
 
-    # -- Отправка сообщения от сервера
-    res = pickle.dumps(d)
-    user.sendall(res)
 
-    user.close()
-    print('Disconnected -', addr)
 
