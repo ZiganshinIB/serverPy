@@ -74,3 +74,12 @@ class MySqlDB:
     # TODO: _get_connection_or_(**kwargs) -> list
     # TODO: _get_connection_and_(**kwargs) -> list
 
+
+    # TODO: _set_ area_(area_id:int, **kwargs) -> bool
+    # TODO: _set_ location_(location_id: int, **kwargs) -> bool
+    # TODO: _set_ device_type_( device_type_id: int, **kwargs) -> bool
+    # TODO: _set_ device_(device_id: int, **kwargs) -> bool
+    # TODO: _set_ device_port_( device_port_id: int, **kwargs) ->bool
+    # TODO: _set_ user_(user_id: int, **kwargs) -> bool
+    # TODO: _set_ connection_( connection_id: int, **kwargs) -> bool
+
