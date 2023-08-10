@@ -23,6 +23,6 @@ def get_server(server: socket.socket):
     while True:
         data = server.recv(config.buffer)
         msg += data
-        if msg[:-4] in config.end:
+        if not len(data):
             break
-    return pickle.loads(msg[:-4])
+    return pickle.loads(msg)
