@@ -1,27 +1,23 @@
-import socket
-import config
-import pickle
+import service
 
+print('''
+1) Создать площадку
+''')
+cmd = input()
 
-HOST = (config.host, config.port)
-client = socket.socket(
-    socket.AF_INET, socket.SOCK_STREAM
-)
-client.connect(HOST)
-print('Connected to', HOST)
-request=input("Введите текст: ")
-request = pickle.dumps(request)
-request += config.end
+request = b''
+match cmd:
+    case '1':
+        name = input('Введите название площадки:')
+        request = ['', {'name': name}]
+    case _:
+        print("Нет такого ")
 
-client.sendall(request)
-msg = b''
-while True:
-    data = client.recv(8)
-    if not len(data):
-        break
-    msg += data
+server = service.connection()
+service.send_message(server, request)
+message = service.get_server(server)
 
-print(pickle.loads(msg))
+print(message)
 
 
 
