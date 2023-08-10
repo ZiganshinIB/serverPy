@@ -2,6 +2,12 @@ import pymysql
 import pymysql.cursors
 import config
 
+def _create_data_(table_name: str, data: dict):
+    create_data_sql = f''' 
+        INSERT INTO {table_name} ({', '.join(data)}) VALUES
+        ({', '.join([f'{val}' if (type(val) == int or type(val) == float) else f'"{val}"' for val in data.values()])});
+    '''
+    return create_data_sql
 
 class MySqlDB:
     def init(self):
@@ -19,7 +25,18 @@ class MySqlDB:
             print('Connection refused...')
             print(ex)
 
+    def _create_data_(self, table_name: str, data: dict):
+        create_data_sql = f''' 
+            INSERT INTO {table_name} ({', '.join(data)}) VALUES
+            ({', '.join([f'{val}' if (type(val) == int or type(val) == float) else f'"{val}"' for val in data.values()])});
+        '''
+        return create_data_sql
+
     # TODO _create_area_full_(name: str) -> int area_id:
+    def _create_area_full_(self, name: str) -> int:
+        sql_request = _create_data_(table_name='area', data={'name': name})
+        print(sql_request)
+        pass
     # TODO _create_area_(**kwargs) -> int area_id:
 
     # TODO _create_location_full_(cabinet: str, area_id: int)-> int location_id:
