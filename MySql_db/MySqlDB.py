@@ -19,111 +19,58 @@ class MySqlDB:
             print('Connection refused...')
             print(ex)
 
-    def create_table(self, name, column: dict):
-        try:
-            with self.connection.cursor() as cursor:
-                # create_table_query = f"DROP TABLE IF EXISTS `{name}`;"
-                create_table_query = f"CREATE TABLE `{name}`(\n\tid int AUTO_INCREMENT,\n"
-                for c in column:
-                    create_table_query += f"\t{c} {column[c]},\n"
-                create_table_query += "\tPRIMARY KEY (id)\n);"
-                print(create_table_query)
-                cursor.execute(create_table_query)
-                print('Table created!')
+    # TODO _create_area_full_(name: str) -> int area_id:
+    # TODO _create_area_(**kwargs) -> int area_id:
 
-        except Exception as ex:
-            print("Error...")
-            print(ex)
-        finally:
-            self.connection.close()
+    # TODO _create_location_full_(cabinet: str, area_id: int)-> int location_id:
+    # TODO _create_location_(**kwargs)-> int location_id:
 
-    def insert_data_in_tabel(self, table_name, datas: list[dict]):
-        try:
-            with self.connection.cursor() as cursor:
-                # create_table_query = f"DROP TABLE IF EXISTS `{name}`;"
+    # TODO _create_device_type_full_ (name: str) -> int device_type_id:
 
-                insert_query = ''
-                for d in datas:
-                    insert_query += f"INSERT INTO `{table_name}` ("
-                    insert_data = ''
-                    for col in d:
-                        insert_query += f"{col}, "
-                        temp = d[col]
-                        insert_data += f"{temp}, " if (type(temp) == int or type(temp) == float) else f"'{temp}', "
-                    insert_query = insert_query[:-2] + ") VALUES(" + insert_data[:-2] + ");\n"
-                print(insert_query)
-                cursor.execute(insert_query)
-                self.connection.commit()
-        except Exception as ex:
-            print("Error...")
-            print(ex)
-        finally:
-            self.connection.close()
+    # TODO _create_device_full_ (name: str, device_type_id: int, location_id: int) -> int device_id:
+    # TODO _create_device_(**kwargs) -> int device_id:
 
-    def insert_datas_in_tabel(self, table_name, col: list, datas: list):
-        try:
-            with self.connection.cursor() as cursor:
-                # create_table_query = f"DROP TABLE IF EXISTS `{name}`;"
+    # TODO _create_device_port_full_(port: int, device_id: int) -> int device_port_id:
+    # TODO _create_device_port_(**kwargs) -> int device_port_id:
 
-                insert_query = ''
-                insert_query += f"INSERT INTO `{table_name}` ({', '.join(col)}) VALUES\n"
-                insert_datas = ''
-                for col_d in datas:
-                    insert_datas += '('
-                    for data in col_d:
-                        insert_datas += f"{data}, " if (type(data) == int or type(data) == float) else f"'{data}', "
-                    insert_datas =insert_datas[:-2] +'),\n'
-                insert_query = insert_query + insert_datas[:-2] + ";"
-                print(insert_query)
-                cursor.execute(insert_query)
-                self.connection.commit()
-        except Exception as ex:
-            print("Error...")
-            print(ex)
-        finally:
-            self.connection.close()
+    # TODO _create_user_full_(name: str, arm_name: str, device_port_id: int) -> user_id:
+    # TODO _create_user_(**kwargs)-> int user_id:
 
-    # TODO: Дописать эту часть
-    def update(self, table_name, ref: dict, filter_):
-        try:
-            with self.connection.cursor() as cursor:
-                update_query = f"UPDATE `{table_name}` SET "
-                for d in ref:
-                    temp = ref[d]
-                    update_query += f"{d} ="
-                    update_query += f"{temp}, " if (type(temp) == int or type(temp) == float) else f"'{temp}', "
-                update_query = update_query[:-2] + "WHERE " + filter_ + ";"
-                print(update_query)
-        except Exception as ex:
-            print("Error...")
-            print(ex)
-        finally:
-            self.connection.close()
-
-    def get(self, table_name, columns, filter_):
-        try:
-            with self.connection.cursor() as cursor:
-                select_query = f"SELECT ({', '.join(columns)})\n"
-                select_query += f"FROM {table_name}"
-                select_query += f"WHERE {filter_};"
-                cursor.execute(select_query)
-        except Exception as ex:
-            print("Error...")
-            print(ex)
-        finally:
-            self.connection.close()
+    # TODO _create_connection_full_(device_port_1_id: int, device_port_2_id: int) -> int connection_id:
+    # TODO _create_connection_(**kwargs) -> int connection_id:
 
 
-    # TODO: _get_user_of_id_full(user_id: int)
+    # TODO: _get_user_of_id__(user_id: int) -> list:
+    # TODO: _get_user_(**kwargs) -> list:
+    # TODO: _get_user_or_(**kwargs) -> list:
+    # TODO: _get_user_and_(**kwargs) -> list:
 
+    # TODO: _get_area_of_id__( area_id: int) -> list:
+    # TODO: _get_area_(**kwargs) -> list:
+    # TODO: _get_area_or_(**kwargs) -> list:
+    # TODO: _get_area_and_(**kwargs) -> list:
 
-    # TODO: _get_user_of_username_full_(user_name: str)
+    # TODO: _get_location_of_id_(location_id: int) -> list:
+    # TODO: _get_location_of_area_(area_id: int) -> list:
+    # TODO: _get_location_(**kwargs) -> list:
+    # TODO: _get_location_or_(**kwargs) -> list:
+    # TODO: _get_ location_and_(**kwargs) -> list:
 
+    # TODO: _get_device_type_of_id_(device_type_id: int)-> list
+    # TODO: _get_device_type_(**kwargs)-> list
 
-    # TODO: _get_user_full(data: dict{<parametr>:<value>})
+    # TODO: _get_device_of_id_(device_id: int)-> list
+    # TODO: _get_device_(**kwargs) -> list
+    # TODO: _get_device_or_(**kwargs) -> list
+    # TODO: _get_device_and_(**kwargs) -> list
 
-    # TODO: _get_users_and_(**conditions)
+    # TODO: _get_device_port_of_id_(device_port_id:int) -> list
+    # TODO: _get_device_port_(**kwargs) -> list
+    # TODO: _get_device_port_or_(**kwargs) -> list
+    # TODO: _get_device_port_and_(**kwargs) -> list
 
-    # TODO: _get_users_or_(**conditions)
+    # TODO: _get_connection_of_id_(connection_id:int) -> list
+    # TODO: _get_connection_(**kwargs) -> list
+    # TODO: _get_connection_or_(**kwargs) -> list
+    # TODO: _get_connection_and_(**kwargs) -> list
 
-    # TODO: _get_area_
