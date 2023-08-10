@@ -112,3 +112,18 @@ class MySqlDB:
             print(ex)
         finally:
             self.connection.close()
+
+
+    # TODO: _get_user_of_id_full(user_id: int)
+
+
+    # TODO: _get_user_of_username_full_(user_name: str)
+
+
+    # TODO: _get_user_full(data: dict{<parametr>:<value>})
+
+    # TODO: _get_users_and_(**conditions)
+
+    # TODO: _get_users_or_(**conditions)
+
+    # TODO: _get_area_
