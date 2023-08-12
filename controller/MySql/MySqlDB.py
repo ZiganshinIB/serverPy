@@ -3,7 +3,8 @@ import pymysql.cursors
 import config
 
 
-def init():
+
+def connection_db():
     try:
         connection = pymysql.connect(
             host=config.host,
@@ -21,16 +22,26 @@ def init():
 
 def _create_data_(table_name: str, data: dict):
     create_data_sql = f''' 
-INSERT INTO {table_name} ({', '.join(data)}) VALUES
+INSERT INTO `{table_name}` ({', '.join(data)}) VALUES
 ({', '.join([f'{val}' if (type(val) == int or type(val) == float) else f'"{val}"' for val in data.values()])});
 '''
     return create_data_sql
 
 
 # TODO create_area_full(name: str) -> int area_id:
-def create_area_full(name: str) -> int:
+def create_area_full(name: str):
     sql_request = _create_data_(table_name='area', data={'name': name})
-    return sql_request
+    connection = connection_db()
+    try:
+        with connection.cursor() as cursor:
+            print(cursor.execute(sql_request))
+            print(connection.commit())
+    except Exception as ex:
+        print("Error...")
+        print(ex)
+    finally:
+        connection.close()
+    return None
 
 
 # TODO _create_area_(**kwargs) -> int area_id:

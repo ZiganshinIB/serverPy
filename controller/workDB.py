@@ -1,4 +1,4 @@
-from .MySql import MySqlDB
+from MySql import MySqlDB
 
 sql = MySqlDB
 
