@@ -80,11 +80,33 @@ def create_location_full(cabinet: str, area_id):
 # TODO _create_connection_full_(device_port_1_id: int, device_port_2_id: int) -> int connection_id:
 # TODO _create_connection_(**kwargs) -> int connection_id:
 
-def _get_data_(table_name: str, data: dict):
-    create_data_sql = f''' 
+def _get_data_and_(table_name: str, data: dict):
+    get_data_sql = f''' 
 SELECT * FROM `{table_name}` 
-WHERE {' AND '.join([f'{name}={val}' if (type(val) == int or type(val) == float) else f'{name}="{val}"' for name, val in data.items()])}'''
-    return create_data_sql
+WHERE {' AND '.join([f'{name}={val}' if (type(val) == int or type(val) == float) else f'{name}="{val}"' for name, val in data.items()])};'''
+    return get_data_sql
+
+
+def _get_data_or_(table_name: str, data: dict):
+    get_data_sql = f''' 
+SELECT * FROM `{table_name}` 
+WHERE {' OR '.join([f'{name}={val}' if (type(val) == int or type(val) == float) else f'{name}="{val}"' for name, val in data.items()])};'''
+    return get_data_sql
+
+
+def _get_data_or_list_(table_name: str, data: dict):
+    get_data_sql = f''' 
+SELECT * FROM `{table_name}` 
+WHERE {' OR '.join([f'{name}={val}' if (type(val) == int or type(val) == float) else f'{name}="{val}"' for name, vals in data.items() for val in vals])};'''
+    return get_data_sql
+
+
+def _get_data_and_list_(table_name: str, data: dict):
+    get_data_sql = f''' 
+SELECT * FROM `{table_name}` 
+WHERE '''
+    get_data_sql = get_data_sql + " AND ".join(['('+' OR '.join([f'{name}={val}' if (type(val) == int or type(val) == float) else f'{name}="{val}"' for val in vals]) +')' for name, vals in data.items()])
+    return get_data_sql
 
 # TODO: _get_user_of_id__(user_id: int) -> list:
 # TODO: _get_user_(**kwargs) -> list:
@@ -98,14 +120,9 @@ WHERE {' AND '.join([f'{name}={val}' if (type(val) == int or type(val) == float)
 
 # TODO: _get_area_(**kwargs) -> list:
 def get_area(**kwargs):
-    name = kwargs['name']
-    print(name)
-    t = '''
-SELECT * FROM `area`
-WHERE name = 'name'
-'''
+    return ()
 # TODO: _get_area_or_(**kwargs) -> list:
-# TODO: _get_area_and_(**kwargs) -> list:
+# TODO: _get_area_or_(**kwargs) -> list:
 
 # TODO: _get_location_of_id_(location_id: int) -> list:
 # TODO: _get_location_of_area_(area_id: int) -> list:
