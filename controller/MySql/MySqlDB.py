@@ -3,7 +3,6 @@ import pymysql.cursors
 import config
 
 
-
 def connection_db():
     try:
         connection = pymysql.connect(
@@ -51,10 +50,20 @@ def create_area(**kwargs) -> int:
 
 
 # TODO _create_location_full_(cabinet: str, area_id: int)-> int location_id:
-def create_location_full(cabinet: str, area_id) -> int:
+def create_location_full(cabinet: str, area_id):
     sql_request = _create_data_(table_name='location', data={'cabinet': cabinet, 'area_id': area_id})
     connection = connection_db()
-    pass
+    try:
+        with connection.cursor() as cursor:
+            print(cursor.execute(sql_request))
+            print(connection.commit())
+    except Exception as ex:
+        print("Error...")
+        print(ex)
+    finally:
+        connection.close()
+
+
 # TODO _create_location_(**kwargs)-> int location_id:
 
 # TODO _create_device_type_full_ (name: str) -> int device_type_id:
@@ -71,14 +80,30 @@ def create_location_full(cabinet: str, area_id) -> int:
 # TODO _create_connection_full_(device_port_1_id: int, device_port_2_id: int) -> int connection_id:
 # TODO _create_connection_(**kwargs) -> int connection_id:
 
+def _get_data_(table_name: str, data: dict):
+    create_data_sql = f''' 
+SELECT * FROM `{table_name}` 
+WHERE {' AND '.join([f'{name}={val}' if (type(val) == int or type(val) == float) else f'{name}="{val}"' for name, val in data.items()])}'''
+    return create_data_sql
 
 # TODO: _get_user_of_id__(user_id: int) -> list:
 # TODO: _get_user_(**kwargs) -> list:
 # TODO: _get_user_or_(**kwargs) -> list:
 # TODO: _get_user_and_(**kwargs) -> list:
 
+
+
+
 # TODO: _get_area_of_id__( area_id: int) -> list:
+
 # TODO: _get_area_(**kwargs) -> list:
+def get_area(**kwargs):
+    name = kwargs['name']
+    print(name)
+    t = '''
+SELECT * FROM `area`
+WHERE name = 'name'
+'''
 # TODO: _get_area_or_(**kwargs) -> list:
 # TODO: _get_area_and_(**kwargs) -> list:
 
