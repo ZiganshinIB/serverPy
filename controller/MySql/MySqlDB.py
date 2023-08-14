@@ -48,7 +48,13 @@ def create_area_full(name: str):
 def create_area(**kwargs) -> int:
     sql_request = _create_data_(table_name='area', data={'name': kwargs['name']})
     return sql_request
+
+
 # TODO _create_location_full_(cabinet: str, area_id: int)-> int location_id:
+def create_location_full(cabinet: str, area_id) -> int:
+    sql_request = _create_data_(table_name='location', data={'cabinet': cabinet, 'area_id': area_id})
+    connection = connection_db()
+    pass
 # TODO _create_location_(**kwargs)-> int location_id:
 
 # TODO _create_device_type_full_ (name: str) -> int device_type_id:
