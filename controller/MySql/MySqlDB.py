@@ -108,24 +108,80 @@ WHERE '''
     get_data_sql = get_data_sql + " AND ".join(['('+' OR '.join([f'{name}={val}' if (type(val) == int or type(val) == float) else f'{name}="{val}"' for val in vals]) +')' for name, vals in data.items()])
     return get_data_sql
 
+
 # TODO: _get_user_of_id__(user_id: int) -> list:
 # TODO: _get_user_(**kwargs) -> list:
 # TODO: _get_user_or_(**kwargs) -> list:
 # TODO: _get_user_and_(**kwargs) -> list:
-
-
-
-
 # TODO: _get_area_of_id__( area_id: int) -> list:
+def get_area(name: str):
+    """
+    Возвращает совпадение по имени площадки
+    :param name: name of the area
+    :return: result of the SQL request
+    """
 
-# TODO: _get_area_(**kwargs) -> list:
-def get_area(**kwargs):
-    return ()
-# TODO: _get_area_or_(**kwargs) -> list:
-# TODO: _get_area_or_(**kwargs) -> list:
+    sql_request = _get_data_and_(table_name='area', data={'name': name})
+    connection = connection_db()
+    try:
+        with connection.cursor() as cursor:
+            print(cursor.execute(sql_request))
+            rows = cursor.fetchall()
+            print(rows)
+            return rows
+    except Exception as ex:
+        print("Error...")
+        print(ex)
+    finally:
+        connection.close()
 
-# TODO: _get_location_of_id_(location_id: int) -> list:
-# TODO: _get_location_of_area_(area_id: int) -> list:
+
+def get_area_or(names):
+    """
+        Возвращает площадки совпавшие по именам
+        :param names: Names of areas
+        :return: result of the SQL request
+        """
+    sql_request = _get_data_or_list_(table_name='area', data={'name': names})
+    connection = connection_db()
+    try:
+        with connection.cursor() as cursor:
+            print(cursor.execute(sql_request))
+            rows = cursor.fetchall()
+            print(rows)
+            return rows
+    except Exception as ex:
+        print("Error...")
+        print(ex)
+    finally:
+        connection.close()
+
+
+def _join_tables_(tables_args: dict):
+    sql_request = '''
+select    
+    {table_arg}.{tables_args[table_arg][0]} AS "{table_arg}_{tables_args[table_arg][0]}"
+    {table_arg}.{tables_args[table_arg][1]} AS "{table_arg}_{tables_args[table_arg][1]}"
+    
+'''
+
+# TODO: _get_location_of_area_(**kwargs) -> list:
+def get_location_of_area(**kwargs):
+    """
+    Возвращает кабинеты совпавшие по именам
+    :param kwargs: area_name or area_id
+    :return: result of the SQL request (list of location)
+    """
+    sql_request = '''
+SELECT 
+    location.id AS "ID"
+    location.name AS "name"
+    area.name AS "area_name" 
+FROM `location` 
+join `area` on area.id = area_id
+where ... ; 
+'''
+
 # TODO: _get_location_(**kwargs) -> list:
 # TODO: _get_location_or_(**kwargs) -> list:
 # TODO: _get_ location_and_(**kwargs) -> list:
