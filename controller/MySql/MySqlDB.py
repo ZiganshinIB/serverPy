@@ -79,6 +79,11 @@ def create_location_full(cabinet: str, area_id):
 
 # TODO _create_connection_full_(device_port_1_id: int, device_port_2_id: int) -> int connection_id:
 # TODO _create_connection_(**kwargs) -> int connection_id:
+def _get_data_(table_name: str):
+    get_data_sql = f''' 
+SELECT * FROM `{table_name}`'''
+    return get_data_sql
+
 
 def _get_data_and_(table_name: str, data: dict):
     get_data_sql = f''' 
@@ -114,6 +119,28 @@ WHERE '''
 # TODO: _get_user_or_(**kwargs) -> list:
 # TODO: _get_user_and_(**kwargs) -> list:
 # TODO: _get_area_of_id__( area_id: int) -> list:
+
+def get_area_all():
+    """
+    Возвращает совпадение по имени площадки
+    :param name: name of the area
+    :return: result of the SQL request
+    """
+
+    sql_request = _get_data_(table_name='area')
+    connection = connection_db()
+    try:
+        with connection.cursor() as cursor:
+            print(cursor.execute(sql_request))
+            rows = cursor.fetchall()
+            return rows
+    except Exception as ex:
+        print("Error...")
+        print(ex)
+    finally:
+        connection.close()
+
+
 def get_area(name: str):
     """
     Возвращает совпадение по имени площадки

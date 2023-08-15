@@ -12,7 +12,7 @@ def create_location(**kwargs):
 
 
 def get_area(**kwargs):
-    return sql.get_area(name=kwargs['name'])
+        return sql.get_area(name=kwargs['name'])
 
 
 def create_location_area_id(**kwargs):
