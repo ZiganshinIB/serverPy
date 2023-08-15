@@ -10,6 +10,9 @@ match cmd:
     case '1':
         name = input('Введите название площадки:')
         request = ['create_area', {'name': name}]
+    case '2':
+        name = input('Введите название площадки:')
+        request = ['get_area', {'name': name}]
     case _:
         print("Нет такого ")
 

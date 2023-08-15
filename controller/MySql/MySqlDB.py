@@ -157,13 +157,24 @@ def get_area_or(names):
         connection.close()
 
 
-def _join_tables_(tables_args: dict):
+def _join_tables_(tables_args: dict, join_to: dict):
+    """
+    Возвращает запрос с INNER JOIN
+    :param tables_args: {table_name : [col]}
+    :param join_to: {(table, col) : (table, col)}
+    :return: INNER JOIN
+    """
     sql_request = '''
-select    
-    {table_arg}.{tables_args[table_arg][0]} AS "{table_arg}_{tables_args[table_arg][0]}"
-    {table_arg}.{tables_args[table_arg][1]} AS "{table_arg}_{tables_args[table_arg][1]}"
-    
-'''
+SELECT \n\t'''
+    sql_request = sql_request + ', \n\t'.join([f'{table_name}.{col} AS "{table_name}.{col}"' for table_name in tables_args for col in tables_args[table_name]])
+    sql_request = sql_request + f"\nFROM {list(tables_args.keys())[0]}\n"
+    for in_join, to_join in join_to.items():
+        sql_request = sql_request + f"JOIN {to_join[0]} ON {to_join[0]}.{to_join[1]} = {in_join[0]}.{in_join[1]}\n"
+    return sql_request
+
+
+
+
 
 # TODO: _get_location_of_area_(**kwargs) -> list:
 def get_location_of_area(**kwargs):
@@ -172,15 +183,15 @@ def get_location_of_area(**kwargs):
     :param kwargs: area_name or area_id
     :return: result of the SQL request (list of location)
     """
-    sql_request = '''
-SELECT 
-    location.id AS "ID"
-    location.name AS "name"
-    area.name AS "area_name" 
-FROM `location` 
-join `area` on area.id = area_id
-where ... ; 
-'''
+    sql_request = _join_tables_({'location': ['id', 'cabinet'], 'area': ['name']},
+                                {('location', 'area_id'): ('area', 'id')})
+    if 'area_id' in kwargs:
+        sql_request = sql_request + f'''WHERE area.id = {kwargs['area_id']};'''
+    elif 'area_name' in kwargs:
+        sql_request = sql_request + f'''WHERE area.name = {kwargs['area_name']};'''
+    else:
+        sql_request = sql_request + ';'
+    return sql_request
 
 # TODO: _get_location_(**kwargs) -> list:
 # TODO: _get_location_or_(**kwargs) -> list:

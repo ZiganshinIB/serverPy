@@ -41,6 +41,13 @@ def make_request(request, data):
                 return message
             else:
                 return False
+        case 'get_area':
+            if 'name' in data:
+                message = workDB.get_area(name=data['name'])
+                return message
+            else:
+                return False
+
     return None
 
 
