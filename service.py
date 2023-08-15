@@ -47,8 +47,17 @@ def make_request(request, data):
                 return message
             else:
                 return False
-
+        case 'create_location':
+            if 'cabinet' in data:
+                if 'area_id' in data:
+                    message = workDB.create_location_area_id(name=data['cabinet'],
+                                                             area_id=data['area_id'])
+                elif 'area_name' in data:
+                    message = workDB.create_location_area_name(name=data['cabinet'],
+                                                               area_name=data['area_id'])
+                else:
+                    message = " Не указан площадь "
+                return message
+            else:
+                return False
     return None
-
-
-

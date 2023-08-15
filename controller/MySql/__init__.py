@@ -1,3 +1,3 @@
-import MySqlDB
+from . import MySqlDB
 
 

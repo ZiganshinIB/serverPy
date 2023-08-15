@@ -1,6 +1,6 @@
 import pymysql
 import pymysql.cursors
-import config
+from . import config
 
 
 def connection_db():
@@ -34,7 +34,7 @@ def create_area_full(name: str):
     try:
         with connection.cursor() as cursor:
             print(cursor.execute(sql_request))
-            print(connection.commit())
+            connection.commit()
     except Exception as ex:
         print("Error...")
         print(ex)
@@ -173,9 +173,6 @@ SELECT \n\t'''
     return sql_request
 
 
-
-
-
 # TODO: _get_location_of_area_(**kwargs) -> list:
 def get_location_of_area(**kwargs):
     """
@@ -188,10 +185,42 @@ def get_location_of_area(**kwargs):
     if 'area_id' in kwargs:
         sql_request = sql_request + f'''WHERE area.id = {kwargs['area_id']};'''
     elif 'area_name' in kwargs:
-        sql_request = sql_request + f'''WHERE area.name = {kwargs['area_name']};'''
+        sql_request = sql_request + f'''WHERE area.name = \"{kwargs['area_name']}\";'''
     else:
         sql_request = sql_request + ';'
     return sql_request
+
+
+def get_location(**kwargs):
+    sql_request = _join_tables_({'location': ['id', 'cabinet'], 'area': ['name']},
+                                {('location', 'area_id'): ('area', 'id')})
+    if 'id' in kwargs:
+        sql_request = sql_request + f'''WHERE location.id = {kwargs['id']};'''
+    elif 'cabinet' in kwargs:
+        sql_request = sql_request + f'''WHERE location.cabinet = \"{kwargs['area_name']}\"'''
+        if 'area_id' in kwargs:
+            sql_request = sql_request + f''' AND area.id = {kwargs['area_id']};'''
+        elif 'area_name' in kwargs:
+            sql_request = sql_request + f''' AND area.name = \"{kwargs['area_name']};\"'''
+    else:
+        if 'area_id' in kwargs:
+            sql_request = sql_request + f'''WHERE area.id = {kwargs['area_id']};'''
+        elif 'area_name' in kwargs:
+            sql_request = sql_request + f'''WHERE area.name = \"{kwargs['area_name']}\";'''
+        else:
+            sql_request = sql_request + ';'
+    connection = connection_db()
+    try:
+        with connection.cursor() as cursor:
+            print(cursor.execute(sql_request))
+            rows = cursor.fetchall()
+            print(rows)
+            return rows
+    except Exception as ex:
+        print("Error...")
+        print(ex)
+    finally:
+        connection.close()
 
 # TODO: _get_location_(**kwargs) -> list:
 # TODO: _get_location_or_(**kwargs) -> list:
